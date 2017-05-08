@@ -1,15 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
 
 Vue.use(Router)
 
+// 文章列表
+
+const articleIndex = resolve => require(['../view/article/index'], resolve);
+
 export default new Router({
+   scrollBehavior: () => ({ y: 0 }),
   routes: [
-    {
-      path: '/',
-      name: 'Hello',
-      component: Hello
-    }
+     { name:'首页', path: '/' },
+     { name:'文章列表', path: '/article', component: articleIndex, hidden: true },
   ]
 })

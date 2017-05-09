@@ -3,7 +3,7 @@
           <el-menu mode="vertical" class="el-menu-vertical-demo" theme="dark" :default-active="$route.path">
 
               <router-link class="title-link" to="article">
-                <el-menu-item  :index="$route.path" ><i class="el-icon-document"></i>文章管理</el-menu-item>
+                <el-menu-item index="/article" ><i class="el-icon-document"></i>文章管理</el-menu-item>
               </router-link>
               <el-menu-item index="2"><i class="el-icon-menu"></i>分类管理</el-menu-item>
               <el-menu-item index="3"><i class="el-icon-message"></i>留言管理</el-menu-item>

@@ -7,11 +7,7 @@
       <div class="main-content">
         
           <Topbar></Topbar>
-          <section class="app-main" style="min-height: 100%">
-              <transition name="fade" mode="out-in">
-                  <router-view></router-view>
-              </transition>
-          </section>
+          <Layout></Layout>
 
       </div>
   </div>
@@ -21,12 +17,15 @@
 <script>
 import Navbar from "@/view/layout/Navbar"
 import Topbar from "@/view/layout/Topbar"
+import Layout from "@/view/layout/Layout"
 
 export default {
   name: 'app',
+  
   components: {
     Navbar,
-    Topbar
+    Topbar,
+    Layout
   }
 }
 </script>

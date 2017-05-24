@@ -15,11 +15,9 @@
 
           <el-button type="primary" icon="search">搜索</el-button>
 
-
           <router-link class="add-link" to="/article/add">
             <el-button type="primary" icon="edit">添加</el-button>
           </router-link>
-
 
       </div>
       <div class="article-list">
@@ -57,7 +55,7 @@ export default {
   data () {
     return {
        options: [{
-          value: '选项1',
+          value: '黄金糕',
           label: '黄金糕'
         }],
         tableData6: [{

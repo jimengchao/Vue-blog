@@ -1,6 +1,6 @@
 <template>
   <div class="app-container article-list-container">
-        添加文章
+        add
   </div>
 </template>
 

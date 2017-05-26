@@ -13,17 +13,18 @@ axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;char
 
 // request拦截器
 axios.interceptors.request.use(config => {
-	    console.log(config);
+	console.log(config)
 	if(config.method  === 'post'){
 		if( config.data.password ){
 	    	config.data.password = md5(config.data.password);
 	    }
 	    config.data = qs.stringify(config.data);
-
 	}
+
 	if (store.getters.token) {
 		config.headers['M-Token'] = store.getters.token; 
 	}
+	
 	return config;
 
 }, error => {
@@ -33,7 +34,7 @@ axios.interceptors.request.use(config => {
 
 
 axios.interceptors.response.use(res =>{
-  if(res.data.code != '200'){ 
+  if(res.data.code != '200'){
     console.log('状态不对' );
     return Promise.reject(res);
   }

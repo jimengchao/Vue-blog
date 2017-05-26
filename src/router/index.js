@@ -29,8 +29,7 @@ export default new Router({
        children: [
          { path: 'index', component: articleIndex, name: '列表'},
          { path: 'add', component: articleAdd, name: '添加'}
-
-         ]
+        ]
      },
   ]
 })

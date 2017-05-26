@@ -4,7 +4,7 @@ const user = {
   state: {
     user: '',
     status: '',
-    email: '',
+    username: '',
     code: '',
     uid: undefined,
     auth_type: '',
@@ -31,8 +31,8 @@ const user = {
     SET_UID: (state, uid) => {
       state.uid = uid;
     },
-    SET_EMAIL: (state, email) => {
-      state.email = email;
+    SET_USERNAME: (state, username) => {
+      state.username = username;
     },
     SET_INTRODUCTION: (state, introduction) => {
       state.introduction = introduction;
@@ -61,21 +61,17 @@ const user = {
   },
 
   actions: {
-    // 邮箱登录
-    LoginByEmail({ commit }, userInfo) {
-      console.log(userInfo);
-      const username = userInfo.username.trim();
 
+    LoginByEmail({ commit }, userInfo) {
+
+      const username = userInfo.username.trim();
       return new Promise((resolve, reject) => {
 
         loginByEmail(username, userInfo.password).then(response => {
-
-          console.log(response);
-          // const data = response.data;
-          // localStorage.setItem('M-Token', response.data.token);
-          // commit('SET_TOKEN', data.token);
-          // commit('SET_EMAIL', email);
-
+          const data = response.data;
+          localStorage.setItem('M-Token', data.data.token);
+          commit('SET_TOKEN', data.data.token);
+          commit('SET_USERNAME', username);
           resolve();
 
         }).catch(error => {

@@ -12,7 +12,7 @@
                 <el-input placeholder="密码" v-model="loginForm.password" name="password" type="password" class="item-input"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+              <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
                       登录
               </el-button>
             </el-form-item>
@@ -58,12 +58,10 @@ export default {
               this.loading = true;
               this.$store.dispatch('LoginByEmail', this.loginForm).then(() => {
                 this.loading = false;
-
-                console.log(this.loginForm);
                 // this.$router.push({ path: '/' });
                 // this.showDialog = true;
               }).catch(err => {
-                this.$message.error(err);
+                this.$message.error(err.data.msg || '没有此账号~');
                 this.loading = false;
               });
 

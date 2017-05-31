@@ -9,6 +9,8 @@
               <el-menu-item index="3"><i class="el-icon-message"></i>留言管理</el-menu-item>
               <el-menu-item index="4"><i class="el-icon-information"></i>评论管理</el-menu-item>
 
+              <el-menu-item index="5" @click="logout"><i class="el-icon-close"></i>退出</el-menu-item>
+
         </el-menu>
     </div>
 </template>
@@ -18,7 +20,11 @@
 export default {
   name: 'nav',
   methods: {
-     
+     logout(){
+        this.$store.dispatch('LogOut').then(() => {
+            location.reload();
+        })
+     }
   }
 }
 </script>

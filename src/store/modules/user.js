@@ -1,4 +1,4 @@
-import { loginByEmail } from '../../api/login';
+import { loginByEmail, logout } from '../../api/login';
 
 const user = {
   state: {
@@ -106,7 +106,7 @@ const user = {
     //     commit('SET_CODE', code);
     //     loginByThirdparty(state.status, state.email, state.code, state.auth_type).then(response => {
     //       commit('SET_TOKEN', response.data.token);
-    //       Cookies.set('Admin-Token', response.data.token);
+    //       Cookies.set('M-Token', response.data.token);
     //       resolve();
     //     }).catch(error => {
     //       reject(error);
@@ -115,25 +115,25 @@ const user = {
     // },
 
 
-    // // 登出
-    // LogOut({ commit, state }) {
-    //   return new Promise((resolve, reject) => {
-    //     logout(state.token).then(() => {
-    //       commit('SET_TOKEN', '');
-    //       commit('SET_ROLES', []);
-    //       Cookies.remove('Admin-Token');
-    //       resolve();
-    //     }).catch(error => {
-    //       reject(error);
-    //     });
-    //   });
-    // },
+    // 登出
+    LogOut({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        logout(state.token).then(() => {
+          commit('SET_TOKEN', '');
+          // commit('SET_ROLES', []);
+          localStorage.removeItem('M-Token');
+          resolve();
+        }).catch(error => {
+          reject(error);
+        });
+      });
+    },
 
     // // 前端 登出
     // FedLogOut({ commit }) {
     //   return new Promise(resolve => {
     //     commit('SET_TOKEN', '');
-    //     Cookies.remove('Admin-Token');
+    //     Cookies.remove('M-Token');
     //     resolve();
     //   });
     // }

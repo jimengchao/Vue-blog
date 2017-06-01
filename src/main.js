@@ -7,6 +7,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import './styles/common.scss'
 
+import { isLogin } from './api/login'
+
 
 Vue.use(ElementUI);
 
@@ -14,16 +16,11 @@ Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
 
-	// if( store.getters.token ){
-	// 	if( to.path === '/login' ){
-	// 		next({ path: '/' })
-	// 	}else{
-			next();
-	// 	}
-	// }else{
-	// 	next('/login')
-	// }
-
+	if( to.path === '/login' ){
+		store.getters.token ? next('/') : next();
+	}else{
+		store.getters.token ? next() : next('/login');
+	}
 
 })
 

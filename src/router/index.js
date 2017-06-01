@@ -31,5 +31,6 @@ export default new Router({
          { path: 'add', component: articleAdd, name: '添加'}
         ]
      },
+     { path: '*', redirect: '/login'}
   ]
 })

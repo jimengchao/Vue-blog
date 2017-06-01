@@ -1,4 +1,5 @@
-import { loginByEmail, logout } from '../../api/login';
+import { loginByEmail, logout, isLogin } from '../../api/login'
+import Cookies from 'js-cookie'
 
 const user = {
   state: {
@@ -8,7 +9,7 @@ const user = {
     code: '',
     uid: undefined,
     auth_type: '',
-    token: localStorage.getItem('M-Token'),
+    token: Cookies.get('Token'),
     name: '',
     avatar: '',
     introduction: '',
@@ -69,7 +70,7 @@ const user = {
 
         loginByEmail(username, userInfo.password).then(response => {
           const data = response.data;
-          localStorage.setItem('M-Token', data.data.token);
+          Cookies.set('Token', data.data.token,{ expires: 1 });
           commit('SET_TOKEN', data.data.token);
           commit('SET_USERNAME', username);
           resolve();
@@ -89,10 +90,6 @@ const user = {
     //     getInfo(state.token).then(response => {
     //       const data = response.data;
     //       commit('SET_ROLES', data.role);
-    //       commit('SET_NAME', data.name);
-    //       commit('SET_AVATAR', data.avatar);
-    //       commit('SET_UID', data.uid);
-    //       commit('SET_INTRODUCTION', data.introduction);
     //       resolve(response);
     //     }).catch(error => {
     //       reject(error);
@@ -106,7 +103,7 @@ const user = {
     //     commit('SET_CODE', code);
     //     loginByThirdparty(state.status, state.email, state.code, state.auth_type).then(response => {
     //       commit('SET_TOKEN', response.data.token);
-    //       Cookies.set('M-Token', response.data.token);
+    //       Cookies.set('Token', response.data.token);
     //       resolve();
     //     }).catch(error => {
     //       reject(error);
@@ -121,7 +118,7 @@ const user = {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '');
           // commit('SET_ROLES', []);
-          localStorage.removeItem('M-Token');
+          Cookies.remove('Token');
           resolve();
         }).catch(error => {
           reject(error);
@@ -129,11 +126,12 @@ const user = {
       });
     },
 
+
     // // 前端 登出
     // FedLogOut({ commit }) {
     //   return new Promise(resolve => {
     //     commit('SET_TOKEN', '');
-    //     Cookies.remove('M-Token');
+    //     Cookies.remove('Token');
     //     resolve();
     //   });
     // }

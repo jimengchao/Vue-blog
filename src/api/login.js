@@ -8,8 +8,11 @@ export function loginByEmail(username, password) {
 
 }
 
-
 export function logout() {
   return fetch.get('/login/logout');
+}
+
+export function isLogin() {
+  return fetch.get('/login/islogin');
 }
 

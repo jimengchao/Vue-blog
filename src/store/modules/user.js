@@ -119,10 +119,23 @@ const user = {
           commit('SET_TOKEN', '');
           // commit('SET_ROLES', []);
           Cookies.remove('Token');
-          resolve();
+          resolve(resolve);
         }).catch(error => {
           reject(error);
         });
+      });
+    },
+
+
+    isLogin({ commit }) {
+      return new Promise((resolve, reject) => {
+
+        isLogin().then((res) => {
+          resolve(res.data);
+        }).catch(error => {
+          reject(error);
+        });
+
       });
     },
 

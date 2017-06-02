@@ -1,9 +1,10 @@
 <template>
   <div class="app-container article-list-container">
-		<div class="article-head">
-			文章
-		</div>
+		
 		<div class="article-form">
+			<div class="article-head">
+				文章
+			</div>
 			<el-form ref="form" :model="form" label-width="80px" label-position="top">
 			  <el-form-item label="活动名称">
 			    <el-input v-model="form.title"></el-input>
@@ -32,13 +33,16 @@
 			</el-form>
 		</div>
 
+
+		<div class="article-preview">
+			131231231231231231231231231231231234
+		</div>
+
   </div>
 </template>
 
 
 <script>
-import SimpleMDE from 'simplemde'
-import css from 'simplemde/dist/simplemde.min.css'
 
 export default {
 	name: 'articleAdd',
@@ -56,9 +60,7 @@ export default {
 		}
 	},
 	mounted () {
-		let simplemde = new SimpleMDE({
-			element: document.getElementById("editor")
-		});
+	
 	}
 }
 </script>
@@ -69,9 +71,21 @@ export default {
 		color:#2a2a2a;
 		margin-bottom:25px;
 	}
-
+	
 	.article-form{
-		width:440px;
+		display:inline-block;
+		width: 45%;
+		padding-right:60px;
+		margin-right:20px;
+		border-right:2px solid #bfcbd9;
+	}
+	
+	.article-preview{
+		display:inline-block;
+	}
+
+	.article-form,.article-preview{
+		vertical-align: top;
 	}
 	.el-select{
 		width:100%;

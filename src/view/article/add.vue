@@ -22,10 +22,10 @@
 				<el-tag type="danger">标签六</el-tag>
 			  </el-form-item>
 				
-			  	<label class="el-form-item__label">活动内容</label>
-			  <div class="">
-			  	<textarea id="editor"></textarea>
-			  </div>
+			  <el-form-item label="活动内容">
+			    <el-input type="textarea" :autosize="{minRows: 8}" v-model="form.content"></el-input>
+			  </el-form-item>
+
 			  <el-form-item>
 			    <el-button type="primary" @click="onSubmit">保存</el-button>
 			    <el-button>发布</el-button>
@@ -34,8 +34,7 @@
 		</div>
 
 
-		<div class="article-preview">
-			131231231231231231231231231231231234
+		<div class="article-preview" v-highlightjs v-html="previewContent">
 		</div>
 
   </div>
@@ -43,6 +42,9 @@
 
 
 <script>
+import marked from 'marked';
+import '@/assets/js/highlight/highlight.js'
+import '@/assets/js/highlight/styles/agate.css'
 
 export default {
 	name: 'articleAdd',
@@ -50,8 +52,9 @@ export default {
 		return {
 		  	form:{
 		  		title:'',
-
-		  	}
+		  		content:''
+		  	},
+		  	previewContent: ""
 		}
 	},
 	methods:{
@@ -59,9 +62,21 @@ export default {
 			console.log('ok');
 		}
 	},
+	directives: {
+	    highlightjs(el,binding){
+	    	let blocks = el.querySelectorAll('pre code');
+  			Array.prototype.forEach.call(blocks, hljs.highlightBlock);
+	    }
+	},
 	mounted () {
-	
+
+	},
+	watch: {
+		"form.content" (){
+			this.previewContent = marked(this.form.content)
+		}
 	}
+	
 }
 </script>
 
@@ -82,6 +97,7 @@ export default {
 	
 	.article-preview{
 		display:inline-block;
+		width:50%;
 	}
 
 	.article-form,.article-preview{

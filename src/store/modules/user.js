@@ -117,7 +117,6 @@ const user = {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '');
-          // commit('SET_ROLES', []);
           Cookies.remove('Token');
           resolve(resolve);
         }).catch(error => {
@@ -128,6 +127,7 @@ const user = {
 
 
     isLogin({ commit }) {
+
       return new Promise((resolve, reject) => {
 
         isLogin().then((res) => {

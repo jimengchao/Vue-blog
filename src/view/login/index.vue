@@ -59,7 +59,6 @@ export default {
               this.$store.dispatch('LoginByEmail', this.loginForm).then(() => {
                 this.loading = false;
                 this.$router.push({ path: '/' });
-                // this.showDialog = true;
               }).catch(err => {
                 this.$message.error(err.data.msg || '没有此账号~');
                 this.loading = false;
@@ -72,6 +71,9 @@ export default {
 
           });
       }
+    },
+    created(){
+      console.log(this.$refs);
     }
 }
 </script>

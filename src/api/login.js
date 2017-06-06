@@ -1,4 +1,3 @@
-import md5 from 'md5';
 import fetch from '../utils/fetch';
 
 export function loginByEmail(username, password) {

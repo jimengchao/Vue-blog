@@ -15,19 +15,26 @@
 			  </el-form-item>
 
 			  <el-form-item label="标签">
-			    <el-input v-model="form.tag" placeholder="回车创建标签"></el-input>
+
+			    <el-input placeholder="回车创建标签" v-model="form.tag" @keyup.enter.native="createTag"></el-input>
+
 			  </el-form-item>
-			  <el-form-item >
-			    <el-tag>标签一</el-tag>
-				<el-tag type="gray">标签二</el-tag>
-				<el-tag type="primary">标签三</el-tag>
-				<el-tag type="success">标签四</el-tag>
-				<el-tag type="warning">标签五</el-tag>
-				<el-tag type="danger">标签六</el-tag>
+			  <el-form-item>
+				<el-tag
+				  v-for="tag in form.tags"
+				  :key="tag.name"
+				  :closable="true"
+				  :type="tag.type"
+				  @close="delTag(tag)"
+				>
+					{{tag.name}}
+				</el-tag>
 			  </el-form-item>
 				
 			  <el-form-item label="内容">
-			    <el-input type="textarea" :autosize="{minRows: 8}" v-model="form.content"></el-input>
+				<div class="el-textarea">
+					<textarea type="textarea" rows="2" @keydown.9="tabFn" v-model="form.content" autocomplete="off" validateevent="true" class="el-textarea__inner mdEditor" style="height: 180px;"></textarea>
+				</div>
 			  </el-form-item>
 
 			  <el-form-item>
@@ -38,7 +45,7 @@
 		</div>
 
 
-		<div class="article-preview markdown-body" v-html="previewContent">
+		<div class="article-preview markdown-body" v-html="Content">
 		</div>
 
   </div>
@@ -47,25 +54,37 @@
 
 <script>
 import marked from 'marked';
+import range from '@/assets/js/rangeFn'
 import '@/assets/js/highlight/highlight'
 
 import '@/assets/css/markdown.css'
 
-
+let renderer = new marked.Renderer();
 marked.setOptions({
-    renderer: new marked.Renderer(),
+    renderer: renderer,
     gfm: true,
     tables: true,
-    breaks: false,
+    breaks: true,
     pedantic: false,
     sanitize: true,
     smartLists: true,
-    smartypants: false,
-    highlight: function(code) {
-        return hljs.highlightAuto(code).value
-   }
+    smartypants: false
 });
 
+function insertContent(val, that) {
+    let textareaDom = document.querySelector('.mdEditor');
+    let value = textareaDom.value;
+    let point = range.getCursortPosition(textareaDom);
+    let lastChart = value.substring(point - 1, point);
+    let lastFourCharts = value.substring(point - 4, point);
+    if (lastChart != '\n' && value != '' && lastFourCharts != '    ') {
+        val = '\n' + val;
+        range.insertAfterText(textareaDom, val);
+    } else {
+        range.insertAfterText(textareaDom, val);
+    }
+    that.previewContent = document.querySelector('.mdEditor').value;
+}
 
 export default {
 	name: 'articleAdd',
@@ -73,26 +92,70 @@ export default {
 		return {
 		  	form:{
 		  		title:'',
-		  		content:''
+		  		intro:'',
+		  		content:'',
+		  		tag:'',
+		  		tags:[]
 		  	},
 		  	previewContent: ""
 		}
 	},
 	methods:{
-		onSubmit(){
+		onSubmit () {
 			console.log('ok');
-		}
+		},
+		tabFn (evt) {
+            insertContent("    ", this);
+            // 屏蔽屌tab切换事件
+            if (evt.preventDefault) {
+                evt.preventDefault();
+            } else {
+                evt.returnValue = false;
+            }
+        },
+        createTag (){
+
+        	let tag = this.form.tag;
+        	let type = this.getTagType();
+        	this.$store.dispatch('saveArticle',{tag:tag}).then(res => {
+        		if( res.data.code == 200 ){
+        			//添加标签
+        			this.form.tags.push({
+        				name: tag,
+        				type: type
+        			})
+        			//标签输入框置空
+        			this.form.tag = ''
+        		}
+        	}).catch(err => {
+        		this.$message.error(err.data.msg || '添加失败');
+        		console.log(err);
+        	})
+
+        },
+        getTagType(){
+        	let typeArr = ['','gray','primary','success','warning','danger'];
+        	let num = Math.random() * typeArr.length | 0
+        	return typeArr[num];
+        },
+        delTag(evt){
+        	this.form.tags.splice(evt, 1);
+        }
+
 	},
 	directives: {
-	    // highlightjs(el,binding){
-	    // 	let blocks = el.querySelectorAll('pre code');
-  			// Array.prototype.forEach.call(blocks, hljs.highlightBlock);
-	    // }
+	  
 	},
 	mounted () {
 		
 	},
-	
+	computed: {
+		Content(){
+			return marked(this.form.content,{
+                sanitize: true
+            })
+		}
+	},
 	watch: {
 		"form.content" (){
 			this.previewContent = marked(this.form.content,{
@@ -105,6 +168,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+	.el-tag + .el-tag {
+	    margin-left: 10px;
+	}
+
 	.article-head{
 		font-size:20px;
 		color:#2a2a2a;

@@ -1,4 +1,4 @@
-import { postArticle } from '../../api/article'
+import { postTag, postArticle } from '../../api/article'
 
 const article = {
   state: {
@@ -12,15 +12,30 @@ const article = {
   },
 
   actions: {
-    
-    saveArticle({ commit }, data ){
+
+    saveTag({ commit }, data ){
         return new Promise(( resolve, reject ) => {
-            postArticle(data).then(response => {
+            postTag(data).then( response => {
                 resolve(response);
-            }).catch(error => {
+            }).catch( error => {
                 reject(error);
             })
         })
+    },
+
+    saveArticle({ commit }, data ){
+      return new Promise(( resolve, reject ) => {
+
+          postArticle(data).then( response => {
+
+            resolve(response);
+          }).catch( error =>{
+
+            reject(error);
+          })
+
+
+      })
     }
 
   }

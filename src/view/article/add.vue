@@ -5,23 +5,23 @@
 			<div class="article-head">
 				文章
 			</div>
-			<el-form ref="form" :model="form" label-width="80px" label-position="top">
-			  <el-form-item label="标题">
+			<el-form ref="form" :model="form" :rules="rules" label-width="80px" label-position="top">
+			  <el-form-item label="标题" prop="title">
 			    <el-input v-model="form.title"></el-input>
 			  </el-form-item>
 
-			  <el-form-item label="简介">
+			  <el-form-item label="简介" prop="intro">
 			    <el-input type="textarea" :autosize="{minRows: 4}" v-model="form.intro"></el-input>
 			  </el-form-item>
 
 			  <el-form-item label="标签">
 
-			    <el-input placeholder="回车创建标签" v-model="form.tag" @keyup.enter.native="createTag"></el-input>
+			    <el-input placeholder="回车创建标签" v-model="tag" @keyup.enter.native="createTag"></el-input>
 
 			  </el-form-item>
 			  <el-form-item>
 				<el-tag
-				  v-for="tag in form.tags"
+				  v-for="tag in form.tagsArr"
 				  :key="tag.name"
 				  :closable="true"
 				  :type="tag.type"
@@ -31,10 +31,8 @@
 				</el-tag>
 			  </el-form-item>
 				
-			  <el-form-item label="内容">
-				<div class="el-textarea">
-					<textarea type="textarea" rows="2" @keydown.9="tabFn" v-model="form.content" autocomplete="off" validateevent="true" class="el-textarea__inner mdEditor" style="height: 180px;"></textarea>
-				</div>
+			  <el-form-item label="内容" prop="content">
+			  	 <el-input type="textarea" :autosize="{ minRows: 8, maxRows: 10}" :size="{}" @keydown.9.native="tabFn" v-model="form.content"></el-input>
 			  </el-form-item>
 
 			  <el-form-item>
@@ -94,15 +92,42 @@ export default {
 		  		title:'',
 		  		intro:'',
 		  		content:'',
-		  		tag:'',
-		  		tags:[]
+		  		tagsArr:[],
+		  		tags:''
 		  	},
+		  	rules:{
+		  		title:[
+		  			{ required: true, message: '请输入文章标题', trigger: 'blur' }
+		  		],
+		  		intro:[
+		  			{ required: true, message: '请输入文章简介', trigger: 'blur' }
+		  		],
+		  		content:[
+		  			{ required: true, message: '请输入文章内容', trigger: 'blur' }
+		  		]
+		  	},
+		  	tag:'',
 		  	previewContent: ""
 		}
 	},
 	methods:{
 		onSubmit () {
-			console.log('ok');
+
+			this.$refs.form.validate( valid => {
+				if(!valid){
+					return false
+				}
+			})
+
+			let data = this.form;
+			data.tags = data.tagsArr.map( e => e.name ).join(',');
+			delete data.tagsArr;
+			this.$store.dispatch('saveArticle', data ).then(res => {
+				console.log(res);
+			}).catch(err => {
+				console.log(err);
+			})
+
 		},
 		tabFn (evt) {
             insertContent("    ", this);
@@ -115,17 +140,17 @@ export default {
         },
         createTag (){
 
-        	let tag = this.form.tag;
+        	let tag = this.tag;
         	let type = this.getTagType();
-        	this.$store.dispatch('saveArticle',{tag:tag}).then(res => {
+        	this.$store.dispatch('saveTag',{tag:tag}).then(res => {
         		if( res.data.code == 200 ){
         			//添加标签
-        			this.form.tags.push({
+        			this.form.tagsArr.push({
         				name: tag,
         				type: type
         			})
         			//标签输入框置空
-        			this.form.tag = ''
+        			this.tag = ''
         		}
         	}).catch(err => {
         		this.$message.error(err.data.msg || '添加失败');
@@ -139,7 +164,7 @@ export default {
         	return typeArr[num];
         },
         delTag(evt){
-        	this.form.tags.splice(evt, 1);
+        	this.form.tagsArr.splice(evt, 1);
         }
 
 	},

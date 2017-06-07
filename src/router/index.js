@@ -16,7 +16,8 @@ const articleAdd = resolve => require(['../view/article/add'], resolve);
 const Login = resolve => require(['../view/login/index'], resolve);
 
 export default new Router({
-  scrollBehavior: () => ({ y: 0 }),
+  mode:'history',
+  scrollBehavior: () => ({ x: 0,y: 0 }),
   routes: [
      { path: '/login', component: Login, hidden: true },
      { name:'首页', component: Layout,  redirect: '/article', path: '/' },

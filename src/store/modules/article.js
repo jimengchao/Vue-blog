@@ -12,10 +12,10 @@ const article = {
   },
 
   actions: {
-
+    
     saveArticle({ commit }, data ){
         return new Promise(( resolve, reject ) => {
-            postArticle(data).then( response => {
+            postArticle(data).then(response => {
                 resolve(response);
             }).catch(error => {
                 reject(error);

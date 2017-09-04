@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import Article from '../view/article'
+
 Vue.use(Router)
 
 // 布局文件
@@ -14,23 +16,13 @@ const articleAdd = resolve => require(['../view/article/add'], resolve);
 
 
 const Login = resolve => require(['../view/login/index'], resolve);
-
+console.log(Article)
 export default new Router({
   mode:'history',
-  scrollBehavior: () => ({ x: 0,y: 0 }),
   routes: [
      { path: '/login', component: Login, hidden: true },
      { name:'首页', component: Layout,  redirect: '/article', path: '/' },
-     { 
-       name:'文章',
-       path: '/article',
-       component:Layout,
-       redirect: '/article/index',
-       children: [
-         { path: 'index', component: articleIndex, name: '列表'},
-         { path: 'add', component: articleAdd, name: '添加'}
-        ]
-     },
+     ...Article,
      { path: '*', redirect: '/login'}
   ]
 })

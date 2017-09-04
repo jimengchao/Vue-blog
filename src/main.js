@@ -12,7 +12,8 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-
+	console.log(to,from);
+	next();
 	// store.dispatch('isLogin').then(data => {
 	// 	if( data.data.status != 1 ){
 	// 		next('/login')
@@ -23,11 +24,11 @@ router.beforeEach((to, from, next) => {
 
 	// next();
 
-	if( to.path === '/login' ){
-		store.getters.token ? next('/') : next();
-	}else{
-		store.getters.token ? next() : next('/login');
-	}
+	// if( to.path === '/login' ){
+	// 	store.getters.token ? next('/') : next();
+	// }else{
+	// 	store.getters.token ? next() : next('/login');
+	// }
 
 })
 

@@ -8,7 +8,7 @@ import store from '../store';
 
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL = 'http://localhost:8360/api';
-axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+axios.defaults.headers['Content-Type'] = 'application/json';
 
 
 // request拦截器
@@ -44,5 +44,7 @@ axios.interceptors.response.use(res =>{
   console.log("网络异常");
   return Promise.reject(error);
 });
+
+
 
 export default axios;
